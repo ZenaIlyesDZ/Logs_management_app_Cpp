@@ -1,1 +1,1 @@
-# Logiciel-de-gestions-de-logs-en-C-
+# Logiciel-de-gestions-de-logs-en-C++
