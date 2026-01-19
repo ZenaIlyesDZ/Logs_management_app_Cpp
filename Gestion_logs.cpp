@@ -16,21 +16,31 @@ int main() {
     std::cout << "2 - Afficher et enregistrer log ssh" << std::endl;
     std::cout << "0 - Sortir du programme" << std::endl;
     int nombreEntré; // Variable pour stocker le choix de l'utilisateur
+    
+    //** On vérifie si l'entrée est un entier et non une lettre ou autre caractère 
+    
     if (!(std::cin >> nombreEntré)) { // On vérifie si l'entrée est un entier et non une lettre ou autre caractère
         std::cout << "Entrée non valide. Veuillez entrer un chiffre." << std::endl; }
-    else if (nombreEntré != 0 && nombreEntré != 1 && nombreEntré != 2) { // On vérifie si l'entrée est parmi les options valides a savoir 0, 1 ou 2
-        std::cout << "Option non valide. Veuillez réessayer avec une option existante" << std::endl;
-    }
-    else { // Affiche le choix de l'utilisateur si la saisie est correcte
+    
+    // On affiche le choix de l'utilisateur si la saisie est correcte
+        
+    else { 
         std::cout << "Vous avez choisi l'option : " << nombreEntré << std::endl; 
+        switch(nombreEntré){
+        case 1:
+            std::cout << "Affichage des logs sudo" << std::endl;
+        break;
+        case 2:
+            std::cout << "Affichage et enregistrement des logs ssh" << std::endl;
+        break;
+        case 0:
+            std::cout << "Sortie du programme" << std::endl;
+        break;
+        default:
+            std::cout << "Option non valide. Veuillez réessayer avec une option existante" << std::endl;
+        break;
     }
-    if (nombreEntré == 1) {
-        std::cout << "Affichage des logs sudo" << std::endl;
     }
-    else if (nombreEntré == 2){
-        std::cout << "Affichage et enregistrement des logs ssh" << std::endl;
-    }
-    else if (nombreEntré == 0 || nombreEntré >= 3) {
-        std::cout << "Sortie du programme" << std::endl;
-    }
-    }
+    return 0;
+}
+
