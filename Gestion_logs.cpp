@@ -9,22 +9,19 @@
 #include <iostream>
 
 int main() {
+    int nombreEntré; // Variable pour stocker le choix de l'utilisateur
+    do
+    {
     std::cout << "CNED-Gestion de logs" << std::endl;
     std::cout << "Menu" << std::endl;
     std::cout << " Choisir une option" << std::endl;
     std::cout << "1 - Afficher log sudo" << std::endl;
     std::cout << "2 - Afficher et enregistrer log ssh" << std::endl;
     std::cout << "0 - Sortir du programme" << std::endl;
-    int nombreEntré; // Variable pour stocker le choix de l'utilisateur
-    
-    //** On vérifie si l'entrée est un entier et non une lettre ou autre caractère 
-    
     if (!(std::cin >> nombreEntré)) { // On vérifie si l'entrée est un entier et non une lettre ou autre caractère
         std::cout << "Entrée non valide. Veuillez entrer un chiffre." << std::endl; }
     
-    // On affiche le choix de l'utilisateur si la saisie est correcte
-        
-    else { 
+    else {
         std::cout << "Vous avez choisi l'option : " << nombreEntré << std::endl; 
         switch(nombreEntré){
         case 1:
@@ -34,13 +31,15 @@ int main() {
             std::cout << "Affichage et enregistrement des logs ssh" << std::endl;
         break;
         case 0:
-            std::cout << "Sortie du programme" << std::endl;
+            std::cout << "Sortie du programme..." << std::endl;
         break;
         default:
             std::cout << "Option non valide. Veuillez réessayer avec une option existante" << std::endl;
-        break;
-    }
-    }
+        break;   
+            }    
+        }  
+    } while (nombreEntré != 0);
+    
     return 0;
 }
 
