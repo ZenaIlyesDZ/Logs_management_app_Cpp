@@ -13,7 +13,7 @@ This project aim to :
 ## Menu Interface
 
 ## Project structure
-''' text
+```
 Logs management app in C++/
 ├── Doc
 │   ├── Documentation_fonction.h
@@ -25,4 +25,4 @@ Logs management app in C++/
 |── CMakeLists.txt
 |── Gestion_logs.cpp
 └── README.md 
-'''
+```
