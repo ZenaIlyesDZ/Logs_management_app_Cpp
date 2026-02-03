@@ -13,5 +13,17 @@ This project aim to :
 ## Menu Interface
 
 ## Project structure
-<code> Test
+<code>Logs management app in C++/
+├── Doc
+│   ├── Documentation_fonction.h
+│   └── Doxyfile
+├── Menu
+│   |── Menu.cpp
+|   └── Menu.h
+|
+|── CMakeLists.txt
+|──Gestion_logs.cpp
+└── README.md
+
+
 </code>
