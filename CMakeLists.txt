@@ -10,5 +10,15 @@ project(Gestion_logs VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#1/3- Ajouter les fichiers sources de votre projet
+set(SRCS
+    Menu/Menu.cpp
+)
+#2/3- Ajouter les fichiers d'en-tête de votre projet
+set(HEADERS
+    Menu/Menu.h
+)
+#3/3-Ajouter les noms des dossiers de vos modules
+include_directories(Menu)
 
-add_executable(Gestion_logs Gestion_logs.cpp)
+add_executable(Gestion_logs ${SRCS} ${HEADERS})
