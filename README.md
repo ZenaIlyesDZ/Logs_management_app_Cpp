@@ -22,8 +22,5 @@ This project aim to :
 |   └── Menu.h
 |
 |── CMakeLists.txt
-|──Gestion_logs.cpp
-└── README.md
-
-
-</code>
+|── Gestion_logs.cpp
+└── README.md </code>
