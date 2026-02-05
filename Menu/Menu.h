@@ -7,5 +7,6 @@
  * Ce fichier contient le prototype des fonctions utilisées pour afficher le menu principal du programme de gestion des logs et pour traiter les choix de l'utilisateur.
  */
 
+extern int nombreEntré; // Déclaration de la variable globale pour stocker le choix de l'utilisateur
 void afficherMenu();
 int choixLog(int nombreEntré);
