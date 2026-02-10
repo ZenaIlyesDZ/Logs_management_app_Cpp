@@ -34,5 +34,6 @@ int sudoLog();
 int sshLog();
 void hostName(SSHLogging &sshLog);
 void userName(SSHLogging &sshLog);
+int enregistrerSSHLog(SSHLogging sshlog);
 
 #endif
