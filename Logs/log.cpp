@@ -14,24 +14,6 @@ Ce fichier contient les fonctions pour afficher les logs, comme les logs sudo, l
 #include "log.h"
 #include <unistd.h>
 
-struct sshDateTime // Structure pour stocker les dates concernant les log de connexion SSH
-{ 
-    std::string day;
-    std::string hour; 
-    std::string minute; 
-    std::string second; 
-};
-
-struct SSHLogging
-{
-    std::string hostname;
-    std::string username; 
-    std::string sshUser; 
-    std::string sshHost;
-    int sshPort;
-    sshDateTime Date;
-};
-
 void hostName(SSHLogging &sshLog) { // Affiche le nom de l'hôte de la machine  
     char hostname[1024]; // Buffer pour stocker le nom de l'hôte  
     gethostname(hostname, 1024); // Récupère le nom de l'hôte
@@ -66,42 +48,71 @@ int sudoLog() { // Filtre les entrées de log contenant des requêtes sudo depui
 }
 
 int sshLog() { // Structure pour stocker les éléments concernant les log de connexion SSH
-    std::string line; // Variable pour stocker chaque ligne lue du fichier
+    std::string line; //
     sshDateTime sshDateTime;
     SSHLogging sshLog;
+    std::string sshPart; // Variable pour stocker la partie du flux contenant les informations de connexion SSH
     
-    if (nombreEntré == 2) { // Si l'utilisateur choisit 2, on affiche les logs ssh
-        std::ifstream file("/var/log/syslog"); // Ouvre le fichier syslog
+    if (nombreEntré == 2) {
+        std::ifstream file("/var/log/syslog"); 
         
-        if (file.is_open()) { // Vérifie si le fichier est ouvert correctement 
+        if (!file.is_open()) {
+            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
+            return 0;
+            }
+     
             hostName(sshLog);
             userName(sshLog);
             
-            while (std::getline(file, line)) { // Lit chaque ligne du fichier
-                if (line.find("ssh") != std::string::npos) { // Si la ligne contient "ssh", on l'affiche
+            while (std::getline(file, line)) {
                     
-                    std::cout << line << std::endl;
-                    
-                    sshDateTime.day = line.substr(0, 10); // Extrait la date de la ligne
-                    sshDateTime.hour = line.substr(11, 2); // Extrait l'heure de la ligne
-                    sshDateTime.minute = line.substr(14, 2); // Extrait les minutes de la ligne
-                    sshDateTime.second = line.substr(17, 2); // Extrait les secondes de la ligne
-                    
-                    std::cout << "Une connexion SSH a été faite le  : " 
-                    << sshDateTime.day << " à " 
-                    << sshDateTime.hour << " Heure, " 
-                    << sshDateTime.minute << " min et " 
-                    << sshDateTime.second << " secondes" 
-                    << " par la machine " 
-                    << sshLog.hostname << 
-                    " et l'utilisateur " << sshLog.username << std::endl;
-                } 
-            }
-            file.close();
-        } else {
-            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
-        }
+                    // On cherche "ssh "
+                    size_t posSSH = line.find("ssh "); 
+                    if (posSSH == std::string::npos) {
+                        continue;}
 
-    }
-    return 0; 
+                    // On récupère tout ce qui vient après "ssh "
+                    sshPart = line.substr(posSSH + 4);
+
+                    // Vérifications de sécurité
+                    if (sshPart.find("@") == std::string::npos) continue;
+                    if (sshPart.find(" -p") == std::string::npos) continue;
+
+                    // Extraction du nom d'utilisateur
+                    size_t posUser = sshPart.find("@");
+                    sshLog.sshUser = sshPart.substr(0, posUser);
+
+                    // Extraction de l'adresse du serveur
+                    size_t posHost = sshPart.find(" -p");
+                    sshLog.sshHost = sshPart.substr(posUser + 1, posHost - (posUser + 1));
+
+                    // Extraction de la date et de l'heure
+                    sshDateTime.day = line.substr(0, 10);
+                    sshDateTime.hour = line.substr(11, 2); 
+                    sshDateTime.minute = line.substr(14, 2); 
+                    sshDateTime.second = line.substr(17, 2);
+                    
+                    // Extraction du port SSH
+                    sshLog.sshPort = std::stoi(sshPart.substr(posHost + 3));
+
+                    // Affichage des informations de connexion SSH
+                    std::cout << "\n=== Connexion SSH détectée ===\n";
+                    std::cout << "Date : " << sshDateTime.day 
+                              << " à " << sshDateTime.hour << "h "
+                              << sshDateTime.minute << "m "
+                              << sshDateTime.second << "s\n";
+                    
+                    std::cout << "Machine locale : " << sshLog.hostname << "\n";
+                    std::cout << "Utilisateur local : " << sshLog.username << "\n";
+
+                    std::cout << "Utilisateur SSH : " << sshLog.sshUser << "\n";
+                    std::cout << "Serveur SSH : " << sshLog.sshHost << "\n";
+                    std::cout << "Port SSH : " << sshLog.sshPort << "\n";
+                    std::cout << "===============================\n";
+                } 
+            
+            file.close();
+            }
+
+    return 0;
 }
