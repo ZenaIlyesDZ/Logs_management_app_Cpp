@@ -1,10 +1,11 @@
 /*
  * @file : Gestion_logs.cpp
- * @brief summary of the role : Gestionnaire de logs en C++
+ * @brief summary of the role : Logs management software in C++
  * @author : Ilyes
  * @date : 17/01/2026
  * @details :
- * Ce logiciel permet de gestionner des logs, les trier, les visualiser et les enregistrer.
+ * this file contains the main function of the log management software, which displays a menu to the user and allows them to choose between different options for displaying and saving logs, such as sudo logs and ssh logs.
+ * The program continues to display the menu until the user chooses to exit by entering 0.
  */
 
 #include <iostream>
@@ -12,21 +13,22 @@
 #include <string>
 #include "Menu/Menu.h"
 
-int nombreEntré; // Déclaration de la variable globale pour stocker le choix de l'utilisateur
+
+int nombreEntré; // Variable which stock the choice of the user 
 
 int main() {
     do
     {
-        afficherMenu(); // On apelle la fonction afin d'afficher le menu
-        std::cout << "Entrez votre choix : ";
+        afficherMenu(); // Function which display the menu to the user
+        std::cout << "Enter your choice : ";
     
-    if (!(std::cin >> nombreEntré)) { // On vérifie si l'entrée est un entier et non une lettre ou autre caractère
-        std::cout << "Entrée non valide. Veuillez entrer un chiffre." << std::endl; }
+    if (!(std::cin >> nombreEntré)) { // We verify if the entry is an integer, if not we display an error message and ask the user to enter a valid option
+        std::cout << "Invalid entry. Please enter a number." << std::endl; }
     
-    else { // Si l'entrée est un entier, on traite le choix de l'utilisateur
+    else { // If the entry is an integer, we call the function which corresponds to the choice of the user
         choixLog(nombreEntré);
     }
-    } while (nombreEntré != 0); // On affiche le menu jusqu'à ce que l'utilisateur choisisse de sortir en appuyant sur 0
+    } while (nombreEntré != 0); // The program continues to display the menu until the user chooses to exit by entering 0
 
     return 0;
 }
