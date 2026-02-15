@@ -1,10 +1,11 @@
 /**
  * @file Menu.cpp
- * @brief Implémentation des fonctions pour afficher le menu et traiter les choix de l'utilisateur.
+ * @brief summary of the role : This file contains the functions used to display the main menu of the log management program and to process the user's choices.
  * @author Ilyes
- * @date 3 Février 2026
+ * @date 03/02/2026
  * @details
- * Ce fichier contient les fonctions utilisées pour afficher le menu principal du programme de gestion des logs et pour traiter les choix de l'utilisateur.
+ * The function afficherMenu() displays the main menu to the user, which includes options for displaying sudo logs, displaying and saving ssh logs, and exiting the program.
+ * The function choixLog(int nombreEntré) processes the user's choice and calls the appropriate function based on the input.
  */
 
 #include <iostream>
@@ -12,30 +13,30 @@
 #include "../Logs/log.h"
 
 void afficherMenu() {
-    std::cout << "CNED-Gestion de logs" << std::endl;
+    std::cout << "CNED-Log management" << std::endl;
     std::cout << "Menu" << std::endl;
-    std::cout << " Choisir une option" << std::endl;
-    std::cout << "1 - Afficher log sudo" << std::endl;
-    std::cout << "2 - Afficher et enregistrer log ssh" << std::endl;
-    std::cout << "0 - Sortir du programme" << std::endl;
+    std::cout << " Choose an option" << std::endl;
+    std::cout << "1 - Display sudo logs" << std::endl;
+    std::cout << "2 - Display and save ssh logs" << std::endl;
+    std::cout << "0 - Exit the program" << std::endl;
 }
 
 int choixLog(int nombreEntré) {
-    std::cout << "Vous avez choisi l'option : " << nombreEntré << std::endl; 
+    std::cout << "You have chosen option : " << nombreEntré << std::endl; 
         switch(nombreEntré){
         case 1:
-            std::cout << "Affichage des logs sudo" << '\n' << std::endl;
-            sudoLog(); // Appelle la fonction pour afficher les logs sudo
+            std::cout << "Displaying sudo logs" << '\n' << std::endl;
+            sudoLog();
             break;
         case 2:
-            std::cout << "Affichage et enregistrement des logs ssh" << '\n' << std::endl;
-            sshLog(); // Appelle la fonction pour afficher les logs ssh
+            std::cout << "Displaying and saving ssh logs" << '\n' << std::endl;
+            sshLog();
             break;
         case 0:
-            std::cout << "Sortie du programme..." << '\n'<< std::endl;
+            std::cout << "Exiting the program..." << '\n'<< std::endl;
             break;
         default:
-            std::cout << "Option non valide. Veuillez réessayer avec une option existante" << '\n' << std::endl;
+            std::cout << "Invalid option. Please try again with an existing option." << '\n' << std::endl;
             break;   
     }  
     return nombreEntré;
