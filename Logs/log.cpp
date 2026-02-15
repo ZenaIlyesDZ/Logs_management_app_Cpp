@@ -1,10 +1,10 @@
 /*
 @file : log.cpp
-@brief summary of the role : Fichier avec les fonctions pour afficher les logs
+@brief summary of the role : This file contains the functions to display logs, such as sudo logs, ssh logs.
 @author : Ilyes
 @date : 05/02/2026
 @details :
-Ce fichier contient les fonctions pour afficher les logs, comme les logs sudo, logs ssh.
+This file contains the functions to display logs, such as sudo logs, ssh logs. The function sudoLog() filters log entries containing sudo requests from the /var/log/auth.log file and displays them to the user. The function sshLog() extracts and displays SSH connection information from the /var/log/syslog file, including the date, local machine name, local user, SSH user, SSH server, and SSH port. It also saves this information to a file named ssh_logs.txt for future reference.
 */
 
 #include <iostream>
@@ -14,50 +14,50 @@ Ce fichier contient les fonctions pour afficher les logs, comme les logs sudo, l
 #include "log.h"
 #include <unistd.h>
 
-void hostName(SSHLogging &sshLog) { // Affiche le nom de l'hôte de la machine  
-    char hostname[1024]; // Buffer pour stocker le nom de l'hôte  
-    gethostname(hostname, 1024); // Récupère le nom de l'hôte
-    sshLog.hostname = hostname; // Stocke le nom de l'hôte dans la structure
+void hostName(SSHLogging &sshLog) { // retrieve the hostname of the local machine 
+    char hostname[1024];  
+    gethostname(hostname, 1024);
+    sshLog.hostname = hostname; 
  }
 
-void userName(SSHLogging &sshLog) { // Affiche le nom de l'utilisateur de la machine
-    char username[1024]; // Buffer pour stocker le nom de l'utilisateur
-    getlogin_r(username, 1024); // Récupère le nom de l'utilisateur
-    sshLog.username = username; // Stocke le nom de l'utilisateur dans la structure
+void userName(SSHLogging &sshLog) { // retrieve the username of the local user
+    char username[1024]; 
+    getlogin_r(username, 1024); 
+    sshLog.username = username; 
 }
 
 
-int sudoLog() { // Filtre les entrées de log contenant des requêtes sudo depuis le fichier /var/log/auth.log
-    if (nombreEntré == 1) { // Si l'utilisateur choisit 1, on affiche les logs sudo
-    std::ifstream file("/var/log/auth.log"); // Ouvre le fichier auth.log
-    std::string line; // Variable pour stocker chaque ligne lue du fichier
+int sudoLog() { // Filter log entries containing sudo requests from the /var/log/auth.log file and display them to the user
+    if (nombreEntré == 1) {
+    std::ifstream file("/var/log/auth.log"); 
+    std::string line; 
     
-    if (file.is_open()) { // Vérifie si le fichier est ouvert correctement
-        while (std::getline(file, line)) { // Lit chaque ligne du fichier
-            if (line.find("sudo") != std::string::npos) { // Si la ligne contient "sudo", on l'affiche
+    if (file.is_open()) {
+        while (std::getline(file, line)) { 
+            if (line.find("sudo") != std::string::npos) {
                 std::cout << line << std::endl;
             } 
         }
     file.close();
     } else {
-        std::cout << "Impossible d'ouvrir le fichier." << std::endl;
+        std::cout << "Impossible to open the auth.log file." << std::endl;
     }
     }
 
     return 0;
 }
 
-int sshLog() { // Structure pour stocker les éléments concernant les log de connexion SSH
-    std::string line; //
+int sshLog() { // Extract and display SSH connection information from the /var/log/syslog file.
+    std::string line; 
     sshDateTime sshDateTime;
     SSHLogging sshLog;
-    std::string sshPart; // Variable pour stocker la partie du flux contenant les informations de connexion SSH
+    std::string sshPart;
     
     if (nombreEntré == 2) {
         std::ifstream file("/var/log/syslog"); 
         
         if (!file.is_open()) {
-            std::cout << "Impossible d'ouvrir le fichier." << std::endl;
+            std::cout << "Impossible to open the syslog file." << std::endl;
             return 0;
             }
      
@@ -66,46 +66,46 @@ int sshLog() { // Structure pour stocker les éléments concernant les log de co
             
             while (std::getline(file, line)) {
                     
-                    // On cherche "ssh "
+                    // We are looking for lines containing "ssh ". If the line does not contain "ssh ", we continue.
                     size_t posSSH = line.find("ssh "); 
                     if (posSSH == std::string::npos) {
                         continue;}
 
-                    // On récupère tout ce qui vient après "ssh "
+                    //We extract every part of the line after "ssh ".
                     sshPart = line.substr(posSSH + 4);
 
-                    // Vérifications de sécurité
+                    // We check if the line contains "@" and " -p", if not we continue.
                     if (sshPart.find("@") == std::string::npos) continue;
                     if (sshPart.find(" -p") == std::string::npos) continue;
 
-                    // Extraction du nom d'utilisateur
+                    // Retrieval of the SSH username.
                     size_t posUser = sshPart.find("@");
                     sshLog.sshUser = sshPart.substr(0, posUser);
 
-                    // Extraction de l'adresse du serveur
+                    // Retrieval of the SSH server.
                     size_t posHost = sshPart.find(" -p");
                     sshLog.sshHost = sshPart.substr(posUser + 1, posHost - (posUser + 1));
 
-                    // Extraction de la date et de l'heure
+                    // Retrieval of the date and time of the SSH connection.
                     sshDateTime.day = line.substr(0, 10);
                     sshDateTime.hour = line.substr(11, 2); 
                     sshDateTime.minute = line.substr(14, 2); 
                     sshDateTime.second = line.substr(17, 2);
                     
-                    // Extraction du port SSH
+                    // Retrieval of the SSH port.
                     sshLog.sshPort = std::stoi(sshPart.substr(posHost + 3));
 
-                    // Affichage des informations de connexion SSH
-                    std::cout << "\n=== Connexion SSH détectée ===\n";
+                    // Display the SSH connection information and save it to a file named ssh_logs.txt.
+                    std::cout << "\n=== SSH connection has been detected ===\n";
                     std::cout << "Date : " << sshDateTime.day 
-                              << " à " << sshDateTime.hour << "h "
+                              << " at " << sshDateTime.hour << "h "
                               << sshDateTime.minute << "m "
                               << sshDateTime.second << "s\n";
-                    std::cout << "Machine locale : " << sshLog.hostname << "\n";
-                    std::cout << "Utilisateur local : " << sshLog.username << "\n";
-                    std::cout << "Utilisateur SSH : " << sshLog.sshUser << "\n";
-                    std::cout << "Serveur SSH : " << sshLog.sshHost << "\n";
-                    std::cout << "Port SSH : " << sshLog.sshPort << "\n";
+                    std::cout << "Local device : " << sshLog.hostname << "\n";
+                    std::cout << "Local user : " << sshLog.username << "\n";
+                    std::cout << "SSH user : " << sshLog.sshUser << "\n";
+                    std::cout << "SHH server : " << sshLog.sshHost << "\n";
+                    std::cout << "SSH port : " << sshLog.sshPort << "\n";
                     std::cout << "===============================\n";
 
                     sshLog.Date = sshDateTime;
@@ -118,25 +118,25 @@ int sshLog() { // Structure pour stocker les éléments concernant les log de co
     return 0;
 }
 
-int enregistrerSSHLog(SSHLogging sshlog) {
-    std::ofstream outFile("/home/vboxuser/CNED/logiciel_gestions_logs/Logs/ssh_logs.txt", std::ios::app); // Ouvre le fichier en mode ajout pour ne pas écraser les logs précédents
+int enregistrerSSHLog(SSHLogging sshlog) { // Save the SSH connection information to a file named ssh_logs.txt.
+    std::ofstream outFile("/home/vboxuser/CNED/logiciel_gestions_logs/Logs/ssh_logs.txt", std::ios::app); // Open the file in append mode to add new logs without overwriting existing ones.
     if (!outFile) {
-        std::cerr << "Erreur lors de l'ouverture du fichier pour l'enregistrement." << std::endl;
+        std::cerr << "Error opening the file for recording." << std::endl;
         return -1;
     }
 
-    // Écrit les informations de connexion SSH dans le fichier
+    // Write the SSH connection information to the file.
     outFile << "Date : " << sshlog.Date.day 
-            << " à " << sshlog.Date.hour << "h "
+            << " at " << sshlog.Date.hour << "h "
             << sshlog.Date.minute << "m "
             << sshlog.Date.second << "s\n";
-    outFile << "Machine locale : " << sshlog.hostname << "\n";
-    outFile << "Utilisateur local : " << sshlog.username << "\n";
-    outFile << "Utilisateur SSH : " << sshlog.sshUser << "\n";
-    outFile << "Serveur SSH : " << sshlog.sshHost << "\n";
-    outFile << "Port SSH : " << sshlog.sshPort << "\n";
+    outFile << "Local device : " << sshlog.hostname << "\n";
+    outFile << "Local user : " << sshlog.username << "\n";
+    outFile << "SSH user : " << sshlog.sshUser << "\n";
+    outFile << "SHH server : " << sshlog.sshHost << "\n";
+    outFile << "SSH port : " << sshlog.sshPort << "\n";
     outFile << "===============================\n";
 
-    outFile.close(); // Ferme le fichier
+    outFile.close(); // Close the file
     return 1;
 }
