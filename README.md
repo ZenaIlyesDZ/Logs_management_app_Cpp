@@ -37,7 +37,8 @@ in the menu, we have 3 options :
 Logs management app in C++/
 ├── Doc
 │   ├── Documentation_fonction.h
-│   └── Doxyfile
+│   |── Doxyfile
+|   └── English_Doc.h
 |── Logs
 │   |── log.cpp
 |   └── log.h
