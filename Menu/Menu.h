@@ -1,12 +1,12 @@
 /**
  * @file Menu.h
- * @brief Déclaration des fonctions pour afficher le menu et traiter les choix de l'utilisateur.
+ * @brief Prototype of the functions used to display the main menu of the log management program and to process the user's choices.
  * @author Ilyes
  * @date 3 Février 2026
  * @details
- * Ce fichier contient le prototype des fonctions utilisées pour afficher le menu principal du programme de gestion des logs et pour traiter les choix de l'utilisateur.
+ * This file contains the prototypes of the functions used to display the main menu of the log management program and to process the user's choices.
  */
 
-extern int nombreEntré; // Déclaration de la variable globale pour stocker le choix de l'utilisateur
-void afficherMenu();
+extern int nombreEntré; // Declaration of the global variable to store the user's choice
+void afficherMenu(); 
 int choixLog(int nombreEntré);
